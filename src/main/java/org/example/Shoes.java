@@ -1,4 +1,8 @@
 package org.example;
+
+
+import java.text.DecimalFormat;
+
 // Imagine you're writing a program to manage your shoe collection and help decide when you
 // should sell them
 public class Shoes {
@@ -6,12 +10,15 @@ public class Shoes {
     private double originalPrice;
     private int ageInYears;
     private boolean legit;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     // write a new constructor that uses `this` to call the other instructor.
     // it should take in the name and originalPrice, but set the age to 1 and legit to false
 
     // your code here
-
+    public Shoes(String name, double originalPrice) {
+        this(name, originalPrice, 1, false);
+    }
     public Shoes(String name, double originalPrice, int ageInYears, boolean legit) {
         this.name = name;
         this.originalPrice = originalPrice;
@@ -33,7 +40,7 @@ public class Shoes {
     // implement a method `ageShoesByOneYear` that tracks that these Shoes are one year older
     // than before
     public void ageShoesByOneYear() {
-        // your code here
+        ageInYears++;
     }
 
     // implement a method called `getSellingPrice` that returns how much this can be sold for
@@ -50,7 +57,21 @@ public class Shoes {
     // gets +1200 to its price... it's probably not legit anyways.
     public double getSellingPrice() {
         // your code here
-        return 0.0;
+        double currentSellingPrice = originalPrice;
+        if(name.contains("Air Jordan")) {
+           currentSellingPrice += 500;
+        }else if(name.contains("Nike Dunk")) {
+           currentSellingPrice += 700;
+        }else if(name.contains("Red October")) {
+           currentSellingPrice += 21000;
+        }
+        currentSellingPrice *= ageInYears;
+
+        if(!legit) {
+            currentSellingPrice /= 10;
+        }
+
+        return currentSellingPrice;
     }
 
 
@@ -58,14 +79,28 @@ public class Shoes {
     // at least 1.5x the amount of the original price.
     public boolean shouldSell() {
         // your code here
-        return false;
+        double pricedToSell = originalPrice * 1.5;
+        if (this.getSellingPrice() >= pricedToSell) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
     // overload the `shouldSell` method by adding another version that takes in a double parameter
     // that represents the inflation rate.
     // `shouldSell` should return true only if the new selling price is at least 1.5x (the
     // amount of the original price * the inflation rate).
-
+    public boolean shouldSell(double inflation) {
+        inflation /= 10;
+        double pricedToSell = 1.5 * (originalPrice * inflation);
+        System.out.println("Inflation: " + inflation + " pricedToSell: " + pricedToSell);
+        if (this.getSellingPrice() >= pricedToSell) {
+            return true;
+        }else {
+            return false;
+        }
+    }
     // extra for those who want more:
     // make a main method using the Shoes class and design a program that you could actually run
     // every year: learn how to read info from a csv file where each row represents the data for
